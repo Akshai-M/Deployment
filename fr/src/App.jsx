@@ -35,7 +35,7 @@ function App() {
 
   const toggleTodo = async (id) => {
     try {
-      const response = await axios.put(`http://localhost:5000/todos/${id}`);
+      const response = await axios.put(`${import.meta.env.VITE_BACK_URL}/${id}`);
       setTodos(todos.map((todo) => (todo.id === id ? response.data : todo)));
     } catch (error) {
       console.error('Error toggling todo:', error);
@@ -44,7 +44,7 @@ function App() {
 
   const deleteTodo = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/todos/${id}`);
+      await axios.delete(`${import.meta.env.VITE_BACK_URL}/todos/${id}`);
       setTodos(todos.filter((todo) => todo.id !== id));
     } catch (error) {
       console.error('Error deleting todo:', error);
