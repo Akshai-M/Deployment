@@ -1,19 +1,17 @@
+// --- Backend (server.js) ---
 import express from 'express';
-import bodyParser from 'body-parser'; // Correct import for body-parser
+import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 5000; // Use environment variable for port
+const port = process.env.PORT;
+const FRONTEND_URL = process.env.FRONTEND_URL 
 
-const FRONTEND_URL = process.env.FRONTEND_URL // Default if not in .env
-
-app.use(cors({
-    origin: FRONTEND_URL, // Use 'origin' instead of 'path'
-}));
-app.use(bodyParser.json()); // Use bodyParser.json()
+app.use(cors({ origin: FRONTEND_URL }));
+app.use(bodyParser.json());
 
 let todos = [];
 
@@ -23,7 +21,7 @@ app.get('/todos', (req, res) => {
 
 app.post('/todos', (req, res) => {
     const newTodo = {
-        id: Date.now(),
+        id: Date.now().toString(), 
         text: req.body.text,
         completed: false,
     };
@@ -32,7 +30,7 @@ app.post('/todos', (req, res) => {
 });
 
 app.put('/todos/:id', (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     const todoIndex = todos.findIndex((todo) => todo.id === id);
 
     if (todoIndex !== -1) {
@@ -44,7 +42,7 @@ app.put('/todos/:id', (req, res) => {
 });
 
 app.delete('/todos/:id', (req, res) => {
-    const id = parseInt(req.params.id);
+    const id = req.params.id;
     todos = todos.filter((todo) => todo.id !== id);
     res.sendStatus(204);
 });
